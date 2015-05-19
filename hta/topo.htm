@@ -1,0 +1,14 @@
+<html>
+    <head>
+    	<title>Topo</title>
+    	<script type="text/javascript">
+    		function copia_url() {
+    			campo.value = parent.conteudo.location;
+    		}
+    	</script>
+    </head>
+    <body style="background: lightBlue;" onload="copia_url()">
+    	<input type="button" value="Copiar URL" onclick="copia_url()" />
+    	<input type="text" size="120" id="campo" />
+    </body>
+</html>
