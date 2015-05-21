@@ -46,6 +46,7 @@
 var screen_value=0;
 var student_cat=0;
 var buffer='';
+var user_document='';
 
 function initiate(){
 	buffer= '<div id="header-box-primary"><center><h1 style="font-size:45px;font-family:Book Antiqua;color:#0B4C5F">International Student Services</h1><span style="font-size:25px;font-family:Book Antiqua;">Fall 2015 - Check In</span></center></div><h1>&nbsp;</h1>'
@@ -62,7 +63,6 @@ function resetScreen(){
 	print(buffer, "print_canvas");
 	buffer='<center><button type="button"class="btn btn-primary btn-lg" onClick="resume()"><h2>Continue</h2></button></center>'
 	print(buffer, "continue_center");
-	
 }
 
 
@@ -78,16 +78,28 @@ function screen1_cat_select(){
 
 }
 
-function resume(){
-	if(screen_value==0){
+function resume(given){
+	if(screen_value==0 || given==0){
 		$('#screen0_welcome').modal('show')
 	}
-	else if(screen_value==1){
+	else if(screen_value==1 || given==1){
 		$('#screen1_catSelect').modal('show')
 	}
-	else if(screen_value==2){
+	else if(screen_value==2 || given==2){
 		$('#screen2_passport').modal('show')
-	}else{
+	}
+	else if(screen_value==3 || given==3){
+		$('#screen3_visa').modal('show')
+	}
+	else if(screen_value==4 || given==4){
+	 	 document_filler();
+		$('#screen4_doc').modal('show')
+	}
+	else if(screen_value==5 || given==5){
+	 	 document_filler();
+		$('#screen5_confirm').modal('show')
+	}  
+	else{
 		alert('Error. "screen_value" value is beyond the scope.');
 	}
 }
@@ -96,10 +108,22 @@ function screen2_catF1(){
 	if(student_cat==1){
 		$('#same_cat_error').modal('show');
 	}else{
-		student_cat=1;
-		screen_value=2;
-		buffer= '<div id="cat-alert" class="alert alert-success">Selected Category : <strong>F1 - Student</strong><a class="btn btn-sm btn-success" style="float:right" onClick="screen1_cat_select()">Edit</a></div>';
-		setTimeout(function(){print(buffer, "print_canvas");}, 500);
+		if(screen_value==1){
+		  	student_cat=1;
+		  	screen_value=2;
+		}
+		else{
+			student_cat=1;
+			$('#cat-alert').remove();
+			if(screen_value >= 4){
+			 	screen_value=4;
+			 	$('#doc-alert').remove();
+			}
+					
+		}
+		buffer= document.getElementById('print_canvas').innerHTML;
+		buffer= '<div id="cat-alert" class="alert alert-info">Selected Category : <strong>F1 - Student</strong><a class="btn btn-sm btn-primary" style="float:right" onClick="screen1_cat_select()">Edit</a></div>'+buffer;
+		setTimeout(function(){print(buffer, "print_canvas");}, 500);		
 	}
 }
 
@@ -107,28 +131,135 @@ function screen2_catJ1(){
 	if(student_cat==2){
 		$('#same_cat_error').modal('show');
 	}else{
-		student_cat=2;
-		screen_value=2;
-		buffer= '<div id="cat-alert" class="alert alert-info">Selected Category : <strong>J1 - Student</strong><a class="btn btn-sm btn-primary" style="float:right" onClick="screen1_cat_select()">Edit</a></div>';
+		if(screen_value==1){
+			student_cat=2;
+			screen_value=2;
+		}
+		else{
+			student_cat=2;
+			$('#cat-alert').remove();
+			if(screen_value >= 4){
+			 	screen_value=4;
+			 	$('#doc-alert').remove();
+			}
+		}
+		buffer= document.getElementById('print_canvas').innerHTML;
+		buffer= '<div id="cat-alert" class="alert alert-info">Selected Category : <strong>J1 - Student</strong><a class="btn btn-sm btn-primary" style="float:right" onClick="screen1_cat_select()">Edit</a></div>'+buffer;
 		setTimeout(function(){print(buffer, "print_canvas")}, 500);
 	}
 }
 
 
-// Passport Checkbox Validation
-function passport_checkBoxValidation(){
+// Passport Validation
+function screen3_passport(){
     var x = document.getElementById("passport_confirmation");
     if(!x.checked){
-		alert("qualifies");
-		document.getElementById("passport_confirmation_text").style.color= "red";
-		
+		var temp_buffer= document.getElementById("passport_confirmation_text").innerHTML;
+		temp_buffer = '<div id="agreement_violation_p" class="alert alert-danger alert-dismissible fade in">You must agree to the following terms.</div>'+temp_buffer;
+		document.getElementById("passport_confirmation_text").innerHTML= temp_buffer;
+		setTimeout(function(){
+			$('#agreement_violation_p').remove();		
+		},1500);
+	}else{
+		 if(screen_value == 2){
+		 	x.checked= false;
+		 	$('#screen2_passport').modal('hide')
+		 	screen_value=3;
+			buffer= document.getElementById("print_canvas").innerHTML;
+		 	buffer= buffer+'<div id="pass-alert" class="alert alert-success">The passport was scanned and saved on the Desktop.<a class="btn btn-sm btn-success" style="float:right" onClick="resume(2);">Rescan</a></div>';
+			setTimeout(function(){print(buffer, "print_canvas");}, 500);
+		}else{
+			  x.checked= false;
+			  $('#screen2_passport').modal('hide')
+			  $('#pass-alert').remove();							  
+			  buffer= document.getElementById("print_canvas").innerHTML;
+			  buffer= buffer+'<div id="pass-alert" class="alert alert-success">The passport was <strong>re-scanned</strong> and saved on the Desktop.<a class="btn btn-sm btn-success" style="float:right" onClick="resume(2);">Rescan</a></div>';
+			  setTimeout(function(){print(buffer, "print_canvas");}, 500);
+		}
 	}
 }
 
 
+function screen4_visa(){
+    var x = document.getElementById("visa_confirmation");
+    if(!x.checked){
+		var temp_buffer= document.getElementById("visa_confirmation_text").innerHTML;
+		temp_buffer = '<div id="agreement_violation_v" class="alert alert-danger alert-dismissible fade in">You must agree to the following terms.</div>'+temp_buffer;
+		document.getElementById("visa_confirmation_text").innerHTML= temp_buffer;
+		setTimeout(function(){
+			$('#agreement_violation_v').remove();		
+		},1500);
+	}else{
+		 if(screen_value == 3){
+		 	x.checked= false;
+		 	$('#screen3_visa').modal('hide')
+		 	screen_value=4;
+			buffer= document.getElementById("print_canvas").innerHTML;
+		 	buffer= buffer+'<div id="visa-alert" class="alert alert-success">The Visa was scanned and saved on the Desktop.<a class="btn btn-sm btn-success" style="float:right" onClick="resume(3);">Rescan</a></div>';
+			setTimeout(function(){print(buffer, "print_canvas");}, 500);
+		}else{
+			  x.checked= false;
+			  $('#screen3_visa').modal('hide')
+			  $('#visa-alert').remove();							  
+			  buffer= document.getElementById("print_canvas").innerHTML;
+			  buffer= buffer+'<div id="visa-alert" class="alert alert-success">The Visa was <strong>re-scanned</strong> and saved on the Desktop.<a class="btn btn-sm btn-success" style="float:right" onClick="resume(3);">Rescan</a></div>';
+			  setTimeout(function(){print(buffer, "print_canvas");}, 500);
+		}
+	}
+}
+
+
+function screen5_doc(){
+    var x = document.getElementById("document_confirmation");
+    if(!x.checked){
+		var temp_buffer= document.getElementById("document_confirmation_text").innerHTML;
+		temp_buffer = '<div id="agreement_violation_d" class="alert alert-danger alert-dismissible fade in">You must agree to the following terms.</div>'+temp_buffer;
+		document.getElementById("document_confirmation_text").innerHTML= temp_buffer;
+		setTimeout(function(){
+			$('#agreement_violation_d').remove();		
+		},1500);
+	}else{
+		 if(screen_value == 4){
+		 	x.checked= false;
+		 	$('#screen4_doc').modal('hide')
+		 	screen_value=5;
+			buffer= document.getElementById("print_canvas").innerHTML;
+		 	buffer= buffer+'<div id="doc-alert" class="alert alert-success">The <strong>'+user_document+'</strong> was scanned and saved on the Desktop.<a class="btn btn-sm btn-success" style="float:right" onClick="resume(4);">Rescan</a></div>';
+			setTimeout(function(){print(buffer, "print_canvas");}, 500);
+		}else{
+			  x.checked= false;
+			  $('#screen4_doc').modal('hide')
+			  $('#doc-alert').remove();							  
+			  buffer= document.getElementById("print_canvas").innerHTML;
+			  buffer= buffer+'<div id="doc-alert" class="alert alert-success">The <strong>'+user_document+'</strong> was <strong>re-scanned</strong> and saved on the Desktop.<a class="btn btn-sm btn-success" style="float:right" onClick="resume(4);">Rescan</a></div>';
+			  setTimeout(function(){print(buffer, "print_canvas");}, 500);
+		}
+	}
+}
+
+function document_filler(){
+		if(student_cat==1){
+			document.getElementById('document_title').innerHTML="I-20";
+			document.getElementById('document_name').innerHTML="I-20";
+			document.getElementById('document_name_2').innerHTML="I-20";
+			user_document= "I-20";		
+		}
+		else if(student_cat==2){
+			document.getElementById('document_title').innerHTML="DS-2019";
+			document.getElementById('document_name').innerHTML="DS-2019";
+			document.getElementById('document_name_2').innerHTML="DS-2019";
+			user_document= "DS-2019";
+		}
+		
+}
+
+function finish(){
+		document.writeln("Scanning completed. From here the user will get directed to the i-94 step");
+}
+
 </script>
 <!----- ==================================================================================================================================================================== -->
-<!-- Modal Welcome-->
+<!-- Modal Welcome--->
 <div class="modal fade" id="screen0_welcome" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -137,8 +268,8 @@ function passport_checkBoxValidation(){
 				<p>&nbsp;</p>
 				<p class="lead">For this check in you will be performing <strong>3 tasks.</strong></p>
 				<!-- Three tasks --->
-				<div class="alert alert-danger"><p class="lead">1. &nbsp;Retrieving your <strong>I-94</strong></p></div>
-				<div class="alert alert-danger"><p class="lead">2. &nbsp;<strong>Scanning</strong> your documents</p></div>
+				<div class="alert alert-danger"><p class="lead">1. &nbsp;<strong>Scanning</strong> your documents</p></div>
+				<div class="alert alert-danger"><p class="lead">2. &nbsp;Retrieving your <strong>I-94</strong></p></div>
 				<div class="alert alert-danger"><p class="lead">3. &nbsp;Uploading <strong>everything</strong> to iHawk</p></div>
 				<h1>&nbsp;</h1>
 				<!-- Bottom div-->
@@ -152,7 +283,7 @@ function passport_checkBoxValidation(){
     </div>
   </div>
 </div>
-<!----- ==================================================================================================================================================================== -->
+<!----- ==================================================================================================================================================================== --->
 <!-- Modal CatSelect-->
 <div class="modal fade" id="screen1_catSelect" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -178,7 +309,7 @@ function passport_checkBoxValidation(){
     </div>
   </div>
 </div>
-<!----- ==================================================================================================================================================================== -->
+<!----- ==================================================================================================================================================================== --->
 <!-- Same Category Error-->
 <div class="modal fade" id="same_cat_error" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -213,11 +344,83 @@ function passport_checkBoxValidation(){
 				<input id="passport_confirmation" type="checkbox">I have <strong>scanned</strong> my Passport and <strong>saved it</strong> on Desktop.
 			</label>
 		</div>
-        <button type="button" class="btn btn-default" style="position:absolute;right:20px;" onClick="passport_checkBoxValidation()">Next</button>
+        <button type="button" class="btn btn-default" style="position:absolute;right:20px;" onClick="screen3_passport()">Next</button>
 	  </div>
     </div>
   </div>
 </div>
+<!----- ==================================================================================================================================================================== -->
+<!-- VISA SCANNING --->
+<div class="modal fade" id="screen3_visa" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+			<h1>Step 2 : VISA</h1>
+			<p>&nbsp;</p>
+			<p class="lead">Scan your VISA</p>
+			<img src="images/scanning/scanner.gif" height="150px">
+			<h1>&nbsp;</h1>
+      </div>
+      <div class="modal-footer">
+		<div class="checkbox"  style="float:left" id="visa_confirmation_text">
+			<label>
+				<input id="visa_confirmation" type="checkbox">I have <strong>scanned</strong> my Visa and <strong>saved it</strong> on Desktop.
+			</label>
+		</div>
+        <button type="button" class="btn btn-default" style="position:absolute;right:20px;" onClick="screen4_visa()">Next</button>
+	  </div>
+    </div>
+  </div>
+</div>
+<!----- ==================================================================================================================================================================== -->
+<!-- I-20 or DS-2019 SCANNING --->
+<div class="modal fade" id="screen4_doc" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+  	<div class="modal-content">
+      <div class="modal-body">
+			<h1>Step 3 : <span id="document_title"></span></h1>
+			<p>&nbsp;</p>
+			<p class="lead">Scan your <span id="document_name"></span></p>
+			<h1>&nbsp;</h1>
+      </div>
+      <div class="modal-footer">
+		<div class="checkbox"  style="float:left" id="document_confirmation_text">
+			<label>
+				<input id="document_confirmation" type="checkbox">I have <strong>scanned</strong> my <span id="document_name_2"></span> and <strong>saved it</strong> on Desktop.
+			</label>
+		</div>
+        <button type="button" class="btn btn-default" style="position:absolute;right:20px;" onClick="screen5_doc()">Next</button>
+	  </div>
+    </div>
+  </div>
+</div>
+<!----- ==================================================================================================================================================================== -->
+<!-- Confirmation--->
+<div class="modal fade" id="screen5_confirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+       <h1>Scanning Completed!</h1>
+				<p>&nbsp;</p>
+				<p class="lead">You have successfully completed the <strong>first step</strong>of your Check-In.</p>
+				<!-- Three tasks --->
+				<div class="alert alert-success"><p class="lead"><span class="glyphicon glyphicon-check"></span>&nbsp;<strong>Scanning</strong> your documents</p>
+					 
+				</div>
+				<div class="alert alert-danger"><p class="lead">2. &nbsp;Retrieving your <strong>I-94</strong></p></div>
+				<div class="alert alert-danger"><p class="lead">3. &nbsp;Uploading <strong>everything</strong> to iHawk</p></div>
+				<h1>&nbsp;</h1>
+				<!-- Bottom div-->
+      </div>
+      <div class="modal-footer">
+		<center>
+        <button type="button" class="btn btn-success" data-dismiss="modal" onClick="finish()">Alright</button>
+		</center>
+	  </div>
+    </div>
+  </div>
+</div>
+<!----- ==================================================================================================================================================================== --->
 
   <div class="container">
   <p>&nbsp;</p>
@@ -249,7 +452,6 @@ function passport_checkBoxValidation(){
 		<div class="col-lg-2"></div>
 		<div class="col-lg-8">
 			<div id="continue_center">
-				THE CONTINUE BUTTON
 			</div>
 		</div>
 		<div id="r-sidebar"class="col-lg-2">
