@@ -1,8 +1,0 @@
-Screen values and their meaning
-
-
-0		:	The user has clicked on the "Get Started" button. They saw the list of 3 tasks.
-			Then clicked on 'Alright' to proceed to select category when the value was increased to 1.
-
-1		:	The user has just been welcomed. The category has to be selected.
-			When the user selects a category, the value is increased to 2.
