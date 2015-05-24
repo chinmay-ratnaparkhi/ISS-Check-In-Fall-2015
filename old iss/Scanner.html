@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Chinmay Ratnaparkhi</title>
+
+    <link href="css/bootstrap.css" rel="stylesheet">
+	<link href= "ul-styler.css" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<style>
+	
+	.rotate90 {
+		-webkit-transform: rotate(90deg);
+		-moz-transform: rotate(90deg);
+		-o-transform: rotate(90deg);
+		-ms-transform: rotate(90deg);
+		transform: rotate(90deg);
+	}
+
+	#r-corner {
+		border-radius: 10px;
+		border: 1px solid #EFF5FB;
+		padding: 10px; 
+	}
+	
+	#header-box-primary {
+		border-radius: 10px;
+		padding: 25px;
+		background:#A9D0F5;
+	}
+	
+	#header-box-secondary {
+		border-radius: 10px;
+		padding: 10px;
+		background:#A9D0F5;
+	}
+
+	</style>	
+</head>
+<body onLoad="initiate();">
+<script>
+var screen_value=0;
+var student_cat=0;
+var buffer='';
+
+function initiate(){
+	buffer= '<div id="header-box-primary"><center><h1 style="font-size:45px;font-family:Book Antiqua;color:#0B4C5F">International Student Services</h1><span style="font-size:25px;font-family:Book Antiqua;">Fall 2015 - Check In</span></center></div><h1>&nbsp;</h1>'
+	print(buffer, "header_tron");
+	buffer='';
+	buffer= '<p>&nbsp;</p><p>&nbsp;</p><center><p class="lead" style="font-family:Roboto;font-size:25px;">Click the button below to begin</p></center><p>&nbsp;</p><button type="button" style="font-family:Helvetica"class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#screen0_welcome" onClick="resetScreen()"><h1>Get Started </h1></button>';
+	print(buffer, "print_canvas");
+}
+
+function resetScreen(){
+	buffer='<div id="header-box-secondary"><center><h1 style="font-size:45px;font-family:Book Antiqua;color:#0B4C5F">International Student Services</h1></center></div><p>&nbsp;</p>';
+	print(buffer, "header_tron");
+	buffer='';
+	print(buffer, "print_canvas");
+	buffer='<center><button type="button"class="btn btn-primary btn-lg" onClick="resume()"><h2>Continue</h2></button></center>'
+	print(buffer, "continue_center");
+	
+}
+
+
+function print(input_text, location){
+	document.getElementById(location).innerHTML=input_text;
+}
+
+function screen1_cat_select(){
+	if(screen_value==0){
+		screen_value=1;
+	}
+	$('#screen1_catSelect').modal('show')
+
+}
+
+function resume(){
+	if(screen_value==0){
+		$('#screen0_welcome').modal('show')
+	}
+	else if(screen_value==1){
+		$('#screen1_catSelect').modal('show')
+	}
+	else if(screen_value==2){
+		$('#screen2_passport').modal('show')
+	}else{
+		alert('Error. "screen_value" value is beyond the scope.');
+	}
+}
+
+function screen2_catF1(){
+	if(student_cat==1){
+		$('#same_cat_error').modal('show');
+	}else{
+		student_cat=1;
+		screen_value=2;
+		buffer= '<div id="cat-alert" class="alert alert-success">Selected Category : <strong>F1 - Student</strong><a class="btn btn-sm btn-success" style="float:right" onClick="screen1_cat_select()">Edit</a></div>';
+		setTimeout(function(){print(buffer, "print_canvas");}, 500);
+	}
+}
+
+function screen2_catJ1(){
+	if(student_cat==2){
+		$('#same_cat_error').modal('show');
+	}else{
+		student_cat=2;
+		screen_value=2;
+		buffer= '<div id="cat-alert" class="alert alert-info">Selected Category : <strong>J1 - Student</strong><a class="btn btn-sm btn-primary" style="float:right" onClick="screen1_cat_select()">Edit</a></div>';
+		setTimeout(function(){print(buffer, "print_canvas")}, 500);
+	}
+}
+
+
+// Passport Checkbox Validation
+function passport_checkBoxValidation(){
+    var x = document.getElementById("passport_confirmation");
+    if(!x.checked){
+		alert("qualifies");
+		document.getElementById("passport_confirmation_text").style.color= "red";
+		
+	}
+}
+
+
+</script>
+<!----- ==================================================================================================================================================================== -->
+<!-- Modal Welcome-->
+<div class="modal fade" id="screen0_welcome" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+       <h1>Welcome to ISS Check In</h1>
+				<p>&nbsp;</p>
+				<p class="lead">For this check in you will be performing <strong>3 tasks.</strong></p>
+				<!-- Three tasks --->
+				<div class="alert alert-danger"><p class="lead">1. &nbsp;Retrieving your <strong>I-94</strong></p></div>
+				<div class="alert alert-danger"><p class="lead">2. &nbsp;<strong>Scanning</strong> your documents</p></div>
+				<div class="alert alert-danger"><p class="lead">3. &nbsp;Uploading <strong>everything</strong> to iHawk</p></div>
+				<h1>&nbsp;</h1>
+				<!-- Bottom div-->
+				<pre style="font-family:Bookman Antiqua;font-size:22px;Background:#E0E6F8">Let us begin by scanning your immigration documents first.</pre>
+      </div>
+      <div class="modal-footer">
+		<center>
+        <button type="button" class="btn btn-success" data-dismiss="modal" onClick="screen1_cat_select()">Alright</button>
+		</center>
+	  </div>
+    </div>
+  </div>
+</div>
+<!----- ==================================================================================================================================================================== -->
+<!-- Modal CatSelect-->
+<div class="modal fade" id="screen1_catSelect" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+       <h1>Please select your category</h1>
+	   <h1>&nbsp;</h1>
+				<div class="row">
+					<div class="col-lg-2"></div>
+					<div class="col-lg-8">
+						<button type="button" class="btn btn-success btn-lg btn-block" data-dismiss="modal" onClick="screen2_catF1()">
+							<h1>F-1 Student</h1>
+						</button>
+						<button type="button" class="btn btn-primary btn-lg btn-block" data-dismiss="modal" onClick="screen2_catJ1()">
+							<h1>J-1 Student</h1>
+						</button>
+					</div>
+					<div class="col-lg-2"></div>
+				</div>
+				<h1>&nbsp;</h1>
+      </div>
+	  </div>
+    </div>
+  </div>
+</div>
+<!----- ==================================================================================================================================================================== -->
+<!-- Same Category Error-->
+<div class="modal fade" id="same_cat_error" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+       <h1>Error</h1>
+			<p class="lead">You are already in the selected category.</p>
+      </div>
+      <div class="modal-footer">
+		<center>
+        <button type="button" class="btn btn-success" data-dismiss="modal" >Okay</button>
+		</center>
+	  </div>
+    </div>
+  </div>
+</div>
+<!----- ==================================================================================================================================================================== -->
+<!-- Modal Passport --->
+<div class="modal fade" id="screen2_passport" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+			<h1>Step 1 : Passport</h1>
+			<p>&nbsp;</p>
+			<p class="lead">Scan your Passport</p>
+			<img src="images/scanning/being_scanned.gif" height="150px">
+			<h1>&nbsp;</h1>
+      </div>
+      <div class="modal-footer">
+		<div class="checkbox"  style="float:left" id="passport_confirmation_text">
+			<label>
+				<input id="passport_confirmation" type="checkbox">I have <strong>scanned</strong> my Passport and <strong>saved it</strong> on Desktop.
+			</label>
+		</div>
+        <button type="button" class="btn btn-default" style="position:absolute;right:20px;" onClick="passport_checkBoxValidation()">Next</button>
+	  </div>
+    </div>
+  </div>
+</div>
+
+  <div class="container">
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  
+  <!-- The header Row --> 
+	<div class="row">
+		<div class="col-lg-2"></div>
+		<div class="col-lg-8">
+			<div id="header_tron"></div>
+		</div>
+		<div class="col-lg-2"></div>
+	</div>
+	
+	<!-- The Body Row --> 
+	<div class="row">
+		<div class="col-lg-2" id="expansion_row">
+			
+		</div>
+		<div class="col-lg-8">
+			<div id="print_canvas" class="jumbotron"></div>
+		</div>
+		<div id="r-sidebar"class="col-lg-2">
+		</div>
+	</div>
+	
+	<!-- The Footer Row --> 
+	<div class="row">
+		<div class="col-lg-2"></div>
+		<div class="col-lg-8">
+			<div id="continue_center">
+				THE CONTINUE BUTTON
+			</div>
+		</div>
+		<div id="r-sidebar"class="col-lg-2">
+		</div>
+	</div>
+	
+	
+	
+</div>
+
+
+</body>
+</html>

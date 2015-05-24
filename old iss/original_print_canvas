@@ -1,0 +1,9 @@
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				
+				<center><p class="lead" style="font-family:Roboto;font-size:25px;">Click the button below to begin</p>
+				<img src="images/right.gif" class="rotate90"></center>
+				<p>&nbsp;</p>
+				<button type="button" style="font-family:Helvetica"class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#screen0_welcome" onClick="resetScreen()">
+					<h1>Get Started </h1>
+				</button>
