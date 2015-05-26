@@ -15,10 +15,8 @@
 var frame_loads=0;
 var log_failed=0;
 upload_flag=0;
-
 function checkAndSet(){
 	frame_loads++;
-	
 	
 	if(frame_loads==1){
 		if(log_failed==0){
@@ -78,13 +76,18 @@ function print_passport(){
 
 
 function upload_I20(){
-	window.location="i20upload.html";
-		//fram_loads becomes 4.
+	$("passport_note").remove();
+	document.getElementById("instruction_log").innerHTML='<div id="complete_note" class="alert alert-info"><p class="lead"><span class="glyphicon glyphicon-ok"></span>&nbsp;Click next when you are ready to upload your next document.</p></div>';
+	document.getElementById("next_port").innerHTML='<a class="btn btn-success btn-lg" href="i20upload.html"><h3>&nbsp;Next&nbsp;</h3></a>'
+	//fram_loads becomes 4.
 }
 </script>		
 </head>
 	
 <body>
+
+
+
 <!--- ==================================================================================================================================================================== -->
 <!-- Modal Welcome-->
 <div class="modal fade" id="welcome_log" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
@@ -133,7 +136,7 @@ function upload_I20(){
 		<div class="modal-body">
 		   <h1>Upload Passport</h1>
 		   <hr>
-		   <div class="alert alert-info"><p class="lead">Scroll Down the bottom of the page.</p></div>
+		   <div class="alert alert-info"><p class="lead">Scroll Down to the bottom of the page.</p></div>
 		   <div class="alert alert-info"><p class="lead">Fill out information such as first name, surname etc.</p></div>
 		   <div class="alert alert-info"><p class="lead">Click "Choose File", find your passport and Click "Submit"</p></div>
 		</div>
@@ -153,7 +156,7 @@ function upload_I20(){
 			<div class="col-xs-1">
 			</div>
 			<div class="col-xs-10" id="instruction_log"></div>
-			<div class="col-xs-1"></div>
+			<div class="col-xs-1" id= "next_port"></div>
 		</div>
 		<center><iframe id= "stage_area" src="https://ihawk.ku.edu/istart/controllers/client/kansas-login.html?CFID=19028&CFTOKEN=790fa9ded849cd10-DCB78989-E03D-FEFF-1A70A51F51359B22" width="100%" height="600" onLoad="checkAndSet();"></iframe></center>
 	</div>

@@ -19,13 +19,8 @@ upload_flag=0;
 function checkAndSet(){
 	frame_loads++;
 	if(frame_loads==1){
-			$('#instruct_i94').modal('show');
-	}else if(frame_loads==2){
-		completed();
-	}else{
-		alert('error');
+			$('#instruct_completion').modal('show');
 	}
-		
 
 }
 
@@ -35,6 +30,10 @@ function print_i94(){
 	print_station.innerHTML='<div id="i94_note" class="alert alert-danger"><p class="lead"><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;Scroll Down, Select class, Choose file and click "Submit"</p></div>';
 }
 
+function approval(){
+	document.getElementById("password_port").innerHTML= '<div class="form-group"><input type="password" class="form-control" id="password_box" placeholder="Administrative Password" onkeypress="return runScript(event)"></div><div id="message_box"></div><a class="btn btn-default" onClick="password_submit()">Submit</a>';
+	document.getElementById("password_box").focus();
+}
 
 function completed(){
 	$("i94_note").remove();
@@ -42,25 +41,50 @@ function completed(){
 	document.getElementById("next_port").innerHTML='<a class="btn btn-success btn-lg" href="checklist.html"><h3>&nbsp;Next&nbsp;</h3></a>'
 	//fram_loads becomes 4.
 }
+
+function runScript(e) {
+    if (e.keyCode == 13) {
+		password_submit();
+		return false;
+    }
+}
+
+function password_submit(){
+	var entered_pass= document.getElementById("password_box").value;
+	if(entered_pass == 'isscheckin'){
+		document.getElementById('stage_area').src= 'https://ihawk.ku.edu/istart/controllers/client/ClientEngine.cfm?serviceid=EFormGroupProvider&eformGroup=18&menuFlag=true'
+		document.getElementById('approval_port').innerHTML= '<a class= "btn btn-primary" onClick="submit_approval()">Approve</a>'
+		$('#instruct_completion').modal('hide');
+	}else{
+		document.getElementById("password_box").value= '';
+		var error_location= document.getElementById("message_box");
+		error_location.innerHTML='';
+		error_location.innerHTML= '<div class="alert alert-danger" style="float:left;"><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;Invalid Password!</div>';
+		setTimeout(function(){error_location.innerHTML='';}, 1500);
+	}
+}
+
+function submit_approval(){
+	window.location='success.html';
+}
+
 </script>		
 </head>
 	
 <body>
-<!--- ===================================================================================================================================
- -->
-<div class="modal fade" id="instruct_i94" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+<!--- ===================================================================================================================================-->
+<div class="modal fade" id="instruct_completion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog">
     <div class="modal-content">
 		<div class="modal-body">
-		   <h1>Upload I-94</h1>
+		   <h1>Please Raise your hand!</h1>
 		   <hr>
-		   <div class="alert alert-success"><p class="lead">Scroll Down the bottom of the page.</p></div>
-		   <div class="alert alert-success"><p class="lead">Choose your class of admission.</p></div>
-		   <div class="alert alert-success"><p class="lead">Click "Choose File", find your I-94 and Click "Submit"</p></div>
+		   <p class="lead">You have completed the items on your checklist. Please raise your hand and ask for subsequent instructions.</p>
+		   <center><img src="images/raiseHand.gif" height="260"></center>
 		</div>
-		<div class="modal-footer">
+		<div class="modal-footer" id="password_port">
 		<center>
-			<button type="button" class="btn btn-success" data-dismiss="modal" onClick="print_i94();">Okay</button>
+			<button type="button" class="btn btn-primary" onClick="approval();">Administrative Approval</button>
 		</center>
 	  </div>
 	  </div>
@@ -75,7 +99,7 @@ function completed(){
 				<!--<a class="btn btn-primary btn-lg" onClick="checkAndSet()">Help</a>-->
 			</div>
 			<div class="col-xs-10" id="instruction_log"></div>
-			<div class="col-xs-1" id= "next_port"></div>
+			<div class="col-xs-1" id= "approval_port"></div>
 		</div>
 		<center><iframe id= "stage_area" src="https://ihawk.ku.edu/istart/controllers/client/ClientEngine.cfm?serviceid=EFormI94InfoAfterArrival0ServiceProvider&index=120483&eformGroup=18&selectedEFormGroup=1791" width="100%" height="600" onLoad="checkAndSet();"></iframe></center>
 	</div>
