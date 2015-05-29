@@ -273,14 +273,32 @@ function document_filler(){
 
 function finish(){
 	if(student_cat==1){
-		window.location='f1f2/ihawk_f1.html';
+			window.location="f1f2/ihawk_f1.html";
+
 	}else if(student_cat==2){
-		document.write('<h1>ERROR</h1><p class="lead">The category selected by the user was modified along the way. Please contact the following person.</p><p><strong>Chinmay Ratnaparkhi</strong><br>chinmay.ratnaparkhi@gmail.com  or  (785) 312-4046</p>');
-		//window.location='j1j2/ihawk_j1.html';
+			window.location="j1j2/ihawk_j1.html";
+		
 	}else{
 		document.write('<h1>ERROR</h1><p class="lead">The category selected by the user was modified along the way. Please contact the following person.</p><p><strong>Chinmay Ratnaparkhi</strong><br>chinmay.ratnaparkhi@gmail.com  or  (785) 312-4046</p>');
 	}
 	
+}
+
+function checkUrl(url) {
+        var request = false;
+        if (window.XMLHttpRequest) {
+                request = new XMLHttpRequest;
+        } else if (window.ActiveXObject) {
+                request = new ActiveXObject("Microsoft.XMLHttp");
+        }
+
+        if (request) {
+        		document.write('redirecting...');
+                request.open("GET", url);
+                if (request.status == 200) { return true; }
+        }
+
+        return false;
 }
 
 </script>
