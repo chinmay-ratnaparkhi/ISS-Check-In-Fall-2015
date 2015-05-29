@@ -26,7 +26,6 @@ function checkAndSet(){
 }
 
 function print_i94(){
-
 	var print_station = document.getElementById('instruction_log');
 	print_station.innerHTML='<div id="i94_note" class="alert alert-danger"><p class="lead"><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;Scroll Down, Select class, Choose file and click "Submit"</p></div>';
 }
@@ -34,7 +33,7 @@ function print_i94(){
 
 function completed(){
 	$("i94_note").remove();
-	document.getElementById("instruction_log").innerHTML='<div id="complete_note" class="alert alert-success"><p class="lead"><span class="glyphicon glyphicon-ok"></span>&nbsp;Click next when you are ready to upload your next document.</p></div>';
+	document.getElementById("instruction_log").innerHTML='<div id="complete_note" class="alert alert-success"><p class="lead">&nbsp;Click next when you are ready to upload your next document.</p></div>';
 	document.getElementById("next_port").innerHTML='<a class="btn btn-success" href="checklist.html"><h4>&nbsp;Next&nbsp;</h4></a>'
 	//fram_loads becomes 4.
 }

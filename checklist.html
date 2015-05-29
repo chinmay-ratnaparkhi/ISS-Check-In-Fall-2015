@@ -10,6 +10,9 @@
     <link href="css/bootstrap.css" rel="stylesheet">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
+<style>
+#approve_div { z-index: 1000; }
+</style>
 <script>
 
 var frame_loads=0;
@@ -40,7 +43,7 @@ function password_submit(){
 	var entered_pass= document.getElementById("password_box").value;
 	if(entered_pass == 'isscheckin'){
 		document.getElementById('stage_area').src= 'https://ihawk.ku.edu/istart/controllers/client/ClientEngine.cfm?serviceid=EFormGroupProvider&eformGroup=18&menuFlag=true'
-		document.getElementById('approval_port').innerHTML= '<a class= "btn btn-primary" onClick="submit_approval()">Approve</a>'
+		document.getElementById('approval_port').innerHTML= '<a class= "btn btn-danger btn-lg" onClick="submit_approval()"><h1>Approve</h1></a>'
 		$('#instruct_completion').modal('hide');
 	}else{
 		document.getElementById("password_box").value= '';
@@ -80,7 +83,7 @@ function submit_approval(){
 </div>
 <!--=====================================================================================================================================-->
 
-	<iframe id= "stage_area" src="https://ihawk.ku.edu/istart/controllers/client/ClientEngine.cfm?serviceid=EFormI94InfoAfterArrival0ServiceProvider&index=120483&eformGroup=18&selectedEFormGroup=1791" width="100%" height="600" onLoad="checkAndSet();"></iframe>
-	<div><center><span id= "approval_port"></span></center></div>
+	<iframe id= "stage_area" src="https://ihawk.ku.edu/istart/controllers/client/ClientEngine.cfm?serviceid=EFormI94InfoAfterArrival0ServiceProvider&index=120483&eformGroup=18&selectedEFormGroup=1791" width="100%" style="position:absolute;left:0px;height:100%" onLoad="checkAndSet();"></iframe>
+	<div style="position:absolute;left:46%;top:75px;"><center><span id= "approval_port"></span></center></div>
 </body>	
 </html>
