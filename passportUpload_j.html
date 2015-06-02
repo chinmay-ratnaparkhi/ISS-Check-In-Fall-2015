@@ -17,55 +17,57 @@ var log_failed=0;
 upload_flag=0;
 
 function checkAndSet(){
+	
+	if(document.getElementById('stage_area').src=='https://ihawk.ku.edu/istart/controllers/client/kansas-login.html?CFID=19488&CFTOKEN=500be965db7c247f-0FA96FB5-022E-87D3-18B722C9A44BA0BC')
+	{
+		alert("Something went wrong!!!!");
+	}
 	frame_loads++;
 	if(frame_loads==1){
-			$('#instruct_i94').modal('show');
+			$('#instruct_passport').modal('show');
 	}else if(frame_loads==2){
-		completed();
+		upload_passport();
 	}
 }
-
-function print_i94(){
+function print_passport(){
 
 	var print_station = document.getElementById('instruction_log');
-	print_station.innerHTML='<div id="i94_note" class="alert alert-danger"><p class="lead"><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;Scroll Down, Select class, Choose file and click "Submit"</p></div>';
+	print_station.innerHTML='<div id="passport_note" class="alert alert-danger"><p class="lead"><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;Scroll Down, Enter Details, choose file and click "Submit"</p></div>';
 }
 
-
-function completed(){
-	$("i94_note").remove();
-	document.getElementById("instruction_log").innerHTML='<div id="complete_note" class="alert alert-success"><p class="lead"><span class="glyphicon glyphicon-ok"></span>&nbsp;Click next when you are ready to upload your next document.</p></div>';
-	document.getElementById("next_port").innerHTML='<a class="btn btn-success" href="emg_contacts.html"><h4>&nbsp;Next&nbsp;</h4></a>'
+function upload_passport(){
+	$("passport_note").remove();
+	document.getElementById("instruction_log").innerHTML='<div id="complete_note" class="alert alert-success"><p class="lead">Click next when you are ready to upload your next document.</p></div>';
+	document.getElementById("next_port").innerHTML='<a class="btn btn-success" href="ds2019upload.html"><h4>&nbsp;Next&nbsp;</h4></a>'
 	//fram_loads becomes 4.
 }
 
 function skip_doc(){
-	window.location="emg_contacts.html";
+	window.location="ds2019upload_skipper.html";
 }
 
 function skip_confirmation(){
 	$('#skipper').modal('show');
 }
-
 </script>		
 </head>
 	
 <body>
-<!--- ===================================================================================================================================
- -->
-<div class="modal fade" id="instruct_i94" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+<!--- =============================================================================================================================-->
+<!-- Passport Upload Instructions -->
+<div class="modal fade" id="instruct_passport" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog">
     <div class="modal-content">
 		<div class="modal-body">
-		   <h1>Upload I-94</h1>
+		   <h1>Upload Passport</h1>
 		   <hr>
-		   <div class="alert alert-success"><p class="lead">Scroll Down the bottom of the page.</p></div>
-		   <div class="alert alert-success"><p class="lead">Choose your class of admission.</p></div>
-		   <div class="alert alert-success"><p class="lead">Click "Choose File", find your I-94 and Click "Submit"</p></div>
+		   <div class="alert alert-info"><p class="lead">Scroll Down to the bottom of the page.</p></div>
+		   <div class="alert alert-info"><p class="lead">Fill out information such as first name, surname etc.</p></div>
+		   <div class="alert alert-info"><p class="lead">Click "Choose File", find your passport and Click "Submit"</p></div>
 		</div>
 		<div class="modal-footer">
 		<center>
-			<button type="button" class="btn btn-success" data-dismiss="modal" onClick="print_i94();">Okay</button>
+			<button type="button" class="btn btn-success" data-dismiss="modal" onClick="print_passport();">Okay</button>
 		</center>
 	  </div>
 	  </div>
@@ -93,15 +95,12 @@ function skip_confirmation(){
   </div>
 </div>
 <!--=====================================================================================================================================-->
-	<center><iframe id= "stage_area" src="https://ihawk.ku.edu/istart/controllers/client/ClientEngine.cfm?serviceid=EFormI94InfoAfterArrival0ServiceProvider&index=120483&eformGroup=18&selectedEFormGroup=1791" width="100%" style="position:absolute;height:100%;left:0px;"onLoad="checkAndSet();"></iframe></center>
+	<center><iframe id= "stage_area" src="https://ihawk.ku.edu/istart/controllers/client/ClientEngine.cfm?serviceid=EFormPassportInformation1ServiceProvider&index=120483&eformGroup=18&selectedEFormGroup=1791" width="100%" style="position:absolute;left:0;height:100%;"onLoad="checkAndSet();"></iframe></center>
 		<div class="row">
 			<div class="col-xs-1">
-				<!--<a class="btn btn-primary btn-lg" onClick="checkAndSet()">Help</a>-->
 			</div>
 			<div class="col-xs-9" id="instruction_log"></div>
 			<div class="col-xs-2" id="next_port"><a class="btn btn-danger" onClick="skip_confirmation()"><h4>Already<br>Submitted</h4></a></div>
 		</div>
-		
-	</div>
 </body>	
 </html>

@@ -31,21 +31,21 @@ function checkAndSet(){
 function print_visa(){
 
 	var print_station = document.getElementById('instruction_log');
-	print_station.innerHTML='<div id="visa_note" class="alert alert-danger"><p class="lead"><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;Scroll Down, Answer questions, Choose file and click "Submit"</p></div>';
+	print_station.innerHTML='<div id="visa_note" class="alert alert-danger"><p class="lead"><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;Fill out <strong>local address</strong> information and click "Submit"</p></div>';
 }
 
 
 function upload_i94(){
 
 	$("visa_note").remove();
-	document.getElementById("instruction_log").innerHTML='<div id="complete_note" class="alert alert-success"><p class="lead"><span class="glyphicon glyphicon-ok"></span>&nbsp;Click next when you are ready to upload your next document.</p></div>';
-	document.getElementById("next_port").innerHTML='<a class="btn btn-success" href="i94upload.html"><h4>&nbsp;Next&nbsp;</h4></a>'
+	document.getElementById("instruction_log").innerHTML='<div id="complete_note" class="alert alert-success"><p class="lead">Click next when you are ready to upload your next document.</p></div>';
+	document.getElementById("next_port").innerHTML='<a class="btn btn-success" href="checklist.html"><h4>&nbsp;Next&nbsp;</h4></a>'
 	//fram_loads becomes 4.
 }
 
 
 function skip_doc(){
-	window.location="i94upload_skipper.html";
+	window.location="checklist.html";
 }
 
 function skip_confirmation(){
@@ -61,19 +61,16 @@ function skip_confirmation(){
   <div class="modal-dialog">
     <div class="modal-content">
 		<div class="modal-body">
-		   <h1>Upload Visa</h1>
-		   <hr>
-		   <div class="alert alert-success"><p class="lead">Scroll Down to the bottom of the page.</p></div>
-		   <div class="alert alert-success"><p class="lead">Answer the listed questions.</p></div>
-		   <div class="alert alert-success"><p class="lead">Click "Choose File", find your Visa and Click "Submit"</p></div>
+			<h3>Local Address</h3><hr/>
+		  <div class="alert alert-success"><p class="lead">Please fill out your <strong>Local US Address</strong> information.</p></div>
+		  <div class="alert alert-success"><p class="lead">Please follow the United States Postal Service Standards <strong>as shown in the example.</strong></p></div>
 		</div>
 		<div class="modal-footer">
-		<center>
-			<button type="button" class="btn btn-success" data-dismiss="modal" onClick="print_visa();">Okay</button>
-		</center>
-	  </div>
-	  </div>
-    </div>
+			<center>
+				<button type="button" class="btn btn-success" data-dismiss="modal" onClick="print_visa();">Okay</button>
+			</center>
+		</div>
+	</div>
   </div>
 </div>
 <!--=====================================================================================================================================-->
@@ -81,9 +78,9 @@ function skip_confirmation(){
   <div class="modal-dialog">
     <div class="modal-content">
 		<div class="modal-body">
-		   <h1>Skip this document?</h1>
+		   <h1>Skip this form?</h1>
 		   <hr>
-		   <p class="lead">Have you <strong>already uploaded</strong> this document to iHawk?</p>
+		   <p class="lead">Have you <strong>already submitted</strong> this form before?</p>
 		</div>
 		<div class="modal-footer">
 		<center>
@@ -96,13 +93,13 @@ function skip_confirmation(){
   </div>
 </div>
 <!--=====================================================================================================================================-->
-<iframe id= "stage_area" src="https://ihawk.ku.edu/istart/controllers/client/ClientEngine.cfm?serviceid=EFormVisaInfo0ServiceProvider&index=120483&eformGroup=18&selectedEFormGroup=1791" width="100%" style="position:absolute;height:100%;left:0px;" onLoad="checkAndSet();"></iframe>
+<iframe id= "stage_area" src="https://ihawk.ku.edu/istart/controllers/client/ClientEngine.cfm?serviceid=EFormLocalUSAddress0ServiceProvider&index=120483&eformGroup=18&selectedEFormGroup=1791" width="100%" style="position:absolute;height:100%;left:0px;" onLoad="checkAndSet();"></iframe>
 		<div class="row">
 			<div class="col-xs-1">
 				<!--<a class="btn btn-primary btn-lg" onClick="checkAndSet()">Help</a>-->
 			</div>
-			<div class="col-xs-9" id="instruction_log"></div>
-			<div class="col-xs-2" id="next_port"><a class="btn btn-danger" onClick="skip_confirmation()"><h4>Already<br>Submitted</h4></a></div>
+			<div class="col-xs-10" id="instruction_log"></div>
+			<div class="col-xs-1" id="next_port"><a class="btn btn-danger" onClick="skip_confirmation()"><h4 >Skip</h4></a></div>
 		</div>
 </body>	
 </html>

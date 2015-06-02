@@ -18,29 +18,34 @@ upload_flag=0;
 
 function checkAndSet(){
 	frame_loads++;
+	
+	
 	if(frame_loads==1){
-			$('#instruct_i94').modal('show');
+			$('#instruct_visa').modal('show');
 	}else if(frame_loads==2){
-		completed();
+		upload_i94();
 	}
+
 }
 
-function print_i94(){
+function print_visa(){
 
 	var print_station = document.getElementById('instruction_log');
-	print_station.innerHTML='<div id="i94_note" class="alert alert-danger"><p class="lead"><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;Scroll Down, Select class, Choose file and click "Submit"</p></div>';
+	print_station.innerHTML='<div id="visa_note" class="alert alert-danger"><p class="lead"><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;Fill out <strong>emergency contact</strong> information and click "Submit"</p></div>';
 }
 
 
-function completed(){
-	$("i94_note").remove();
-	document.getElementById("instruction_log").innerHTML='<div id="complete_note" class="alert alert-success"><p class="lead"><span class="glyphicon glyphicon-ok"></span>&nbsp;Click next when you are ready to upload your next document.</p></div>';
-	document.getElementById("next_port").innerHTML='<a class="btn btn-success" href="emg_contacts.html"><h4>&nbsp;Next&nbsp;</h4></a>'
+function upload_i94(){
+
+	$("visa_note").remove();
+	document.getElementById("instruction_log").innerHTML='<div id="complete_note" class="alert alert-success"><p class="lead">&nbsp;Click next when you are ready to upload your next document.</p></div>';
+	document.getElementById("next_port").innerHTML='<a class="btn btn-success" href="local_address.html"><h4>&nbsp;Next&nbsp;</h4></a>'
 	//fram_loads becomes 4.
 }
 
+
 function skip_doc(){
-	window.location="emg_contacts.html";
+	window.location="local_address.html";
 }
 
 function skip_confirmation(){
@@ -51,36 +56,30 @@ function skip_confirmation(){
 </head>
 	
 <body>
-<!--- ===================================================================================================================================
- -->
-<div class="modal fade" id="instruct_i94" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+<!--- ===================================================================================================================================-->
+<div class="modal fade" id="instruct_visa" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog">
     <div class="modal-content">
 		<div class="modal-body">
-		   <h1>Upload I-94</h1>
-		   <hr>
-		   <div class="alert alert-success"><p class="lead">Scroll Down the bottom of the page.</p></div>
-		   <div class="alert alert-success"><p class="lead">Choose your class of admission.</p></div>
-		   <div class="alert alert-success"><p class="lead">Click "Choose File", find your I-94 and Click "Submit"</p></div>
+		  <div class="alert alert-success"><p class="lead">Please fill out your <strong>Emergency Contact</strong> information here.</p></div>
+		  <div class="alert alert-success"><p class="lead">Your emergency contact must be a <strong>close relative.</strong></p></div>
 		</div>
 		<div class="modal-footer">
-		<center>
-			<button type="button" class="btn btn-success" data-dismiss="modal" onClick="print_i94();">Okay</button>
-		</center>
-	  </div>
-	  </div>
-    </div>
+			<center>
+				<button type="button" class="btn btn-success" data-dismiss="modal" onClick="print_visa();">Okay</button>
+			</center>
+		</div>
+	</div>
   </div>
 </div>
 <!--=====================================================================================================================================-->
-<!-- Passport Upload Instructions -->
 <div class="modal fade" id="skipper" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog">
     <div class="modal-content">
 		<div class="modal-body">
-		   <h1>Skip this document?</h1>
+		   <h1>Skip this form?</h1>
 		   <hr>
-		   <p class="lead">Have you <strong>already uploaded</strong> this document to iHawk?</p>
+		   <p class="lead">Have you <strong>already submitted</strong> this form before?</p>
 		</div>
 		<div class="modal-footer">
 		<center>
@@ -93,7 +92,7 @@ function skip_confirmation(){
   </div>
 </div>
 <!--=====================================================================================================================================-->
-	<center><iframe id= "stage_area" src="https://ihawk.ku.edu/istart/controllers/client/ClientEngine.cfm?serviceid=EFormI94InfoAfterArrival0ServiceProvider&index=120483&eformGroup=18&selectedEFormGroup=1791" width="100%" style="position:absolute;height:100%;left:0px;"onLoad="checkAndSet();"></iframe></center>
+<iframe id= "stage_area" src="https://ihawk.ku.edu/istart/controllers/client/ClientEngine.cfm?serviceid=EFormEmergencyContacts0ServiceProvider&index=120483&eformGroup=18&selectedEFormGroup=1791" width="100%" style="position:absolute;height:100%;left:0px;" onLoad="checkAndSet();"></iframe>
 		<div class="row">
 			<div class="col-xs-1">
 				<!--<a class="btn btn-primary btn-lg" onClick="checkAndSet()">Help</a>-->
@@ -101,7 +100,5 @@ function skip_confirmation(){
 			<div class="col-xs-9" id="instruction_log"></div>
 			<div class="col-xs-2" id="next_port"><a class="btn btn-danger" onClick="skip_confirmation()"><h4>Already<br>Submitted</h4></a></div>
 		</div>
-		
-	</div>
 </body>	
 </html>
