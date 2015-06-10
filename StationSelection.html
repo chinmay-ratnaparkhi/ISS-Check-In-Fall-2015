@@ -2,96 +2,398 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="generator" content="CoffeeCup Web Editor (www.coffeecup.com)">
-    <meta name="description" content="">
-    <meta name="keywords" content="">
 	<link href="css/bootstrap.css" rel="stylesheet"></link>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 	<script src="js/bootstrap.js"></script>
-    <title>ISS Checkin Summer 2015</title>
+    <title>Document Selection</title>
   <script>
-	function cat_select(){
-		$("#select_cat").modal('show');
+	var my_documents= new Array();
+	var original_background= '#E0ECF8';
+	var hover_background= '#A9D0F5';
+	var selected_background= '#FBEFF5';
+	var i20p;
+	var ds2019p;
+	var phonep;
+	var passp;
+	var visap;
+	var i94p;
+	var error_message='';
+	
+	function update_indices(){
+		i20p= my_documents.indexOf('i20');
+		ds2019p= my_documents.indexOf('ds2019');
+		phonep= my_documents.indexOf('phone');
+		passp= my_documents.indexOf('passport');
+		visap= my_documents.indexOf('visa');
+		i94p= my_documents.indexOf('i94');
 	}
 	
-	function get_f1(){
-		window.location= 'i94Retrieval_f1.html';
+	function doc_clicked(clicked_document){
+		var test_index= my_documents.indexOf(clicked_document);		
+		/* If the document already exists in the array, it should be unchecked
+		 * and removed from the array.
+		 * However, if not, it needs to be checked and added to the array of 
+		 * required documents.
+			*/ 
+			
+		if(test_index > -1) remove_document(clicked_document);		
+		else add_document(clicked_document);
 	}
 	
-	function get_j1(){
-		window.location= 'i94Retrieval_j1.html';
+		
+	function remove_document(clicked_document){
+		
+		
+		var grabber= document.getElementById(clicked_document);
+		grabber.innerHTML = grabber.innerHTML.replace('glyphicon glyphicon-check', '');
+		$(grabber).removeClass('on');
+		
+		var index_toBeRemoved= my_documents.indexOf(clicked_document);
+			if(index_toBeRemoved > -1) my_documents.splice(index_toBeRemoved, 1);
+		
+		if(clicked_document== 'i20'){
+			$('.off').removeClass('off'); 
+		}
+		
+		if(clicked_document == 'ds2019'){
+			update_indices();
+			if(phonep == -1){
+				$('.off').removeClass('off');
+			}
+		}
+		
+		if(clicked_document == 'phone'){
+			update_indices();
+			if(ds2019p == -1){
+				$('.off').removeClass('off');
+			}
+		}
+		
+		
+		
+		
+	}	
+	
+	function add_document(clicked_document){
+		if(clicked_document== 'i20'){
+			if(ds2019p > -1 || phonep > -1){
+				document.write('Something went wrong. Please refresh!');
+				return;
+			}
+		}
+		
+		else if(clicked_document== 'ds2019' || clicked_document== 'phone' ){
+			if(i20p > -1){
+				document.write('Something went wrong. Please refresh!');
+				return;
+			}
+		}
+		
+		
+		// Document Blocking 
+		if(clicked_document== 'i20'){
+			$('#ds2019').addClass('off');
+			$('#phone').addClass('off');
+			$('#orientation').addClass('off');
+		}
+		if(clicked_document== 'ds2019' || clicked_document== 'phone'){
+			$('#i20').addClass('off');
+			$('#orientation').addClass('off');
+		}
+		var grabber= document.getElementById(clicked_document);
+		$(grabber).addClass('on');
+		grabber.innerHTML= '<span class="glyphicon glyphicon-check"></span>'+grabber.innerHTML;
+			
+		my_documents.push(clicked_document);
+		
+		
 	}
+
+	function reset(){
+		for(var every_document in my_documents){
+			var grabber= document.getElementById(my_documents[every_document]);
+			grabber.innerHTML = grabber.innerHTML.replace('glyphicon glyphicon-check', '');
+		}
+		
+		$('.off').removeClass('off');
+		$('.on').removeClass('on'); 
+		my_documents=[];
+		error_message= '';
+		
+	}
+	
+	function Next(){
+		/* Validation Steps */
+		update_indices();
+		if(passp > -1)
+		{
+			if(visap == -1 || i94p == -1){
+				error_message= 'If you have not uploaded your Passport yet, you must select Visa and I-94.';
+				alert(error_message);
+				return;
+			}
+		}
+		
+		if(i20p > -1)
+		{
+			if(visap == -1 || i94p == -1){
+				error_message= 'If you have not uploaded your I-20 yet, you must select Visa and I-94.';
+				alert(error_message);
+				return;
+			}
+		}
+		
+		if(ds2019p > -1)
+		{
+			if(visap == -1 || i94p == -1){
+				error_message= 'If you have not uploaded your DS-2019 yet, you must select Visa and I-94.';
+				alert(error_message);
+				return;
+			}
+		}
+		
+		
+	}
+	
+function cook_up(){
+		checkCookie();
+}
+	
+
+function setCookie(cname,cvalue,exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires=" + d.toGMTString();
+    document.cookie = cname+"="+cvalue+"; "+expires;
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+function checkCookie() {
+    var user=getCookie("username");
+    if (user != "") {
+        alert("Welcome again " + user);
+    } else {
+       user = prompt("Please enter your name:","");
+       if (user != "" && user != null) {
+           setCookie("username", user, 30);
+       }
+    }
+}
+
   </script>
   </head>
   <style>
-  .jumbotron h1{
-	font-family:Bookman Antiqua;
-	font-size:58px;
-  }
+  @font-face {
+	   font-family: big_header;
+	   src: url('fonts/big_header_2.TTF');
+	}
   
-  .jumbotron{
-	background:#CEE3F6;
-  }
+ 
   
-  </style>
-  <body>
-<!----- ==================================================================================================================================================================== --->
-<!-- Modal CatSelect-->
-<div class="modal fade" id="select_cat" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-body">
-       <center><h1>Please select your category</h1></center>
-	   <h1>&nbsp;</h1>
-				<div class="row">
-					<div class="col-lg-2"></div>
-					<div class="col-lg-8">
-						<button type="button" class="btn btn-success btn-lg btn-block" data-dismiss="modal" onClick="get_f1()">
-							<h1>F-1 or F-2 Student</h1>
-						</button>
-						<button type="button" class="btn btn-primary btn-lg btn-block" data-dismiss="modal" onClick="get_j1()">
-							<h1>J-1 or J-2 Student</h1>
-						</button>
-					</div>
-					<div class="col-lg-2"></div>
-				</div>
-				<h1>&nbsp;</h1>
-      </div>
-	  </div>
-    </div>
-  </div>
-</div>
-<!----- ==================================================================================================================================================================== --->  
-	<div class="container" style="position:absolute;left:10%;">
-		<div class="row">
-			<div class="col-sm-12">
-			<h4>&nbsp;</h4>
-				<center><h1 style="font-size:50px;">Station Selection</h1></center>
-				<h1>&nbsp;</h1>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-sm-1"></div>
-			<div class="col-sm-5">
-				<div class="jumbotron">
-				 <center>
-					<a class="btn btn-default btn-lg" href="Scanner.html"><img src="images/scanning/being_scanned.gif" height="200px;"></a>
-					<h3>Scan & Upload Station</h3>
-				 </center>
-				</div>
-			</div>
-			<div class="col-sm-5">
-				<div class="jumbotron">
-				 <center>
-					
-					<a class="btn btn-default btn-lg" onClick="cat_select();"><img src="images/i94sttn.png" height="200px;"></a>
-					<h3>I-94 & Upload Station</h3>
-				 </center>
-				</div>
-			</div>
-			<div class="col-sm-1"></div>
-		</div>
+  .tile{
 	
-	</div>
+	padding:0px;
+	
+	
+  }
+  
+
+.instruction_box {
+	background-color: #F5EFFB;
+	padding-left:25px;
+	border:solid;
+	border-color: #ECE0F8;
+	border-width: 2px;
+	border-radius:10px;
+}
+
+.instruction_box h1{ 
+	font-size: 58px;
+	color:#4C0B5F;
+	padding-left:25px;
+	
+
+}
+
+.instruction_box p{ 
+	padding-top:25px;
+	padding-left:25px;
+	font-size:25px;
+	
+}
+  
+.document-container {
+    margin: 0 -10px 20px;
+}
+.document-tile {
+	padding-left: 0;
+	list-style: none;
+}
+
+.document-tile li {
+	background-color:#E0ECF8;
+	padding: 10px;
+	margin:6px;
+	float: left;
+	
+	/* Border */
+	border:solid;
+	border-width:1px;
+	border-radius:7px;
+	border-color:#D8D8D8;
+	
+	
+	/* Dimensions */
+	width: 23%;
+	height: 115px;
+	
+	
+	/* Content Styling */
+	background-color: #f9f9f9;
+	text-align: center;
+	
+	
+	/* Disable Selection of the tiles */
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+
+	cursor:copy;
+}
+
+.document-tile li:hover {
+	color: #fff;
+	background-color: #563d7c
+
+}
+
+.document-tile li.on, .document-tile li.on:hover {
+	color: #fff;
+	background-color: #380B61;
+	cursor:default;
+}
+
+#reset_tile{
+	background-color:#F8ECE0;
+	cursor:default;
+	text-align:center;
+	right:0px;	
+}
+#reset_tile:hover{
+	background-color:#F6CECE;
+	cursor:default;
+	text-align:center;
+	right:0px;	
+}
+
+#next_tile{
+	background-color:#0B614B;
+	cursor:default;
+	color:#E3F6CE;
+	text-align:center;
+	right:0px;	
+}
+
+#next_tile:hover{
+	background-color:#74DF00;
+	cursor:default;
+	color:#E3F6CE;
+	text-align:center;
+	right:0px;	
+}
+
+
+.document-tile li.off, .document-tile li.off:hover {
+	color: #F2F2F2;
+	background-color: #E6E6E6;
+	pointer-events: none;
+
+}
+
+
+  </style>
+  <body onload="checkCookie()">
+	<div class="container" >
+			<div class="instruction_box">
+				<h1>Instructions</h1>
+				<p class="lead">Please look at your <strong><span style="background:#FE2E64;">&nbsp;Pink Checklist&nbsp;</span></strong> and select the forms that you need to submit.</p>
+			</div>
+			<p>&nbsp;</p>
+		<div class="row">
+			<div class="col-lg-1"></div>
+			<div class="col-lg-10">
+				
+				<div class="document-container">
+						<ul class="document-tile">
+							   <li onClick='doc_clicked(this.id)' id='passport'>
+								  <h3>Passport</h3>
+								</li>
+							  
+							   <li onClick='doc_clicked(this.id)' id='visa'>
+								  <h3>Visa</h3>
+								</li>
+								
+								<li onClick='doc_clicked(this.id)' id='i20'>
+								  <h3>I-20</h3>
+								</li>
+							  
+							   <li onClick='doc_clicked(this.id)' id='ds2019'>
+								  <h3>DS-2019</h3>
+								</li>
+								
+								<li onClick='doc_clicked(this.id)' id='i94'>
+								  <h3>I-94</h3>
+								</li>
+							  
+							   <li onClick='doc_clicked(this.id)' id='contacts'>
+								  <h3>Emergency Contacts</h3>
+								</li>
+								
+								<li onClick='doc_clicked(this.id)' id='address'>
+								  <h3>Local Address</h3>
+								</li>
+							  
+							   <li onClick='doc_clicked(this.id)' id='phone'>
+								  <h3>Phone Number</h3>
+								</li>
+								
+								<li onClick='doc_clicked(this.id)' id='orientation'>
+								  <h3>Orientation</h3>
+								</li>
+							  
+							   <li onClick='doc_clicked(this.id)' id='acceptance'>
+								  <h3>I-797</h3>
+								</li>
+								 
+						</ul>
+					</div>
+					
+							
+			</div>
+			<div class="col-lg-1" id="final_list"></div>
+		</div >
+		
+		<p>&nbsp;</p>
+		<center>
+			<a class="btn btn-default btn-lg" onClick='reset()'>Reset</a>
+			<a class="btn btn-success btn-lg" onClick='Next()'>Submit</a>
+			<a class="btn btn-danger btn-lg" onClick= 'cook_up()'>Set and Get Cookie</a>
+		</center>
+	</div>	
   </body>
 </html>
