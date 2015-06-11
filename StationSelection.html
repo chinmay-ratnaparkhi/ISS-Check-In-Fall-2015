@@ -123,13 +123,18 @@
 	}
 	
 	function Next(){
+		cleanAllCookies();
 		/* Validation Steps */
 		update_indices();
 		if(passp > -1)
 		{
 			if(visap == -1 || i94p == -1){
 				error_message= 'If you have not uploaded your Passport yet, you must select Visa and I-94.';
-				alert(error_message);
+				document.getElementById('error_container').innerHTML= '<div class= "alert alert-danger" id="passport_error">'+error_message+'</div>';
+				setTimeout(function(){
+								$('#passport_error').remove();
+							
+							}, 3000);
 				return;
 			}
 		}
@@ -138,7 +143,11 @@
 		{
 			if(visap == -1 || i94p == -1){
 				error_message= 'If you have not uploaded your I-20 yet, you must select Visa and I-94.';
-				alert(error_message);
+				document.getElementById('error_container').innerHTML= '<div class= "alert alert-danger" id="passport_error">'+error_message+'</div>';
+				setTimeout(function(){
+								$('#passport_error').remove();
+							
+							}, 3000);
 				return;
 			}
 		}
@@ -147,51 +156,106 @@
 		{
 			if(visap == -1 || i94p == -1){
 				error_message= 'If you have not uploaded your DS-2019 yet, you must select Visa and I-94.';
-				alert(error_message);
+				document.getElementById('error_container').innerHTML= '<div class= "alert alert-danger" id="passport_error">'+error_message+'</div>';
+				setTimeout(function(){
+								$('#passport_error').remove();
+							
+							}, 3000);
 				return;
 			}
 		}
 		
+		my_documents
+		cleanCookies
+		update_indices();
+		
+		for(var i=0; i<my_documents.length; i++){
+			var cookie_name= my_documents[i];
+			//setCookie(,'pending');
+		}
+		/*
+		setCookie('total',my_documents.length, 2);
+		for(var item in my_documents){
+			setCookie(item, 'pending', 2);
+		}
+		
+		
+		var howMany= getCookie('total');
+		alert(howMany);
+		
+		var passport_status= getCookie('passport');
+		alert(passport_status);
+		
+		
+		setCookie('passport','completed');
+		
+		passport_status= getCookie('passport');
+		alert(passport_status); */
 		
 	}
 	
-function cook_up(){
-		checkCookie();
+function cleanAllCookies()
+{   
+    var cookies = document.cookie.split(";");
+    for (var i = 0; i < cookies.length; i++)
+    {   
+        var spcook =  cookies[i].split("=");
+        deleteCookie(spcook[0]);
+    }
+    function deleteCookie(cookiename)
+    {
+        var d = new Date();
+        d.setDate(d.getDate() - 1);
+        var expires = ";expires="+d;
+        var name=cookiename;
+        //alert(name);
+        var value="";
+        document.cookie = name + "=" + value + expires + "; path=/acc/html";                    
+    }
 }
+
+
+	function setCookie(cname,cvalue) {
+		var d = new Date();
+		d.setTime(d.getTime() + (24*60*60*1000));
+		document.cookie = cname+"="+cvalue+"; "+"expires=" + d.toGMTString();
+	}
+
+	function getCookie(cname) {
+		var name = cname + '=';
+		var ca = document.cookie.split(';');
+		for(var i=0; i<ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0)==' ') c = c.substring(1);
+			if (c.indexOf(name) == 0) {
+				return c.substring(name.length, c.length);
+			}
+		}
+		return '';
+	}
+
+
+function makeCookie(){
+	setCookie('name', 'Chinmay');
+	for(var i=0; i<my_documents.length; i++){
+		setCookie(my_documents[i], 'still_pending');
+	}
 	
-
-function setCookie(cname,cvalue,exdays) {
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    var expires = "expires=" + d.toGMTString();
-    document.cookie = cname+"="+cvalue+"; "+expires;
 }
 
-function getCookie(cname) {
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0; i<ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1);
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
+function bringCookie(){
+	var give = getCookie('name');
+	alert(give);
 }
 
-function checkCookie() {
-    var user=getCookie("username");
-    if (user != "") {
-        alert("Welcome again " + user);
-    } else {
-       user = prompt("Please enter your name:","");
-       if (user != "" && user != null) {
-           setCookie("username", user, 30);
-       }
-    }
+function dropCookie(){
+	var val= getCookie('name');
+	if(val == ''){
+		alert('name is an empty string already');
+	}else{
+		setCookie('name','');
+	}
 }
-
   </script>
   </head>
   <style>
@@ -327,13 +391,14 @@ function checkCookie() {
 
 
   </style>
-  <body onload="checkCookie()">
+  <body>
 	<div class="container" >
 			<div class="instruction_box">
 				<h1>Instructions</h1>
 				<p class="lead">Please look at your <strong><span style="background:#FE2E64;">&nbsp;Pink Checklist&nbsp;</span></strong> and select the forms that you need to submit.</p>
 			</div>
 			<p>&nbsp;</p>
+			<div class="row" id='error_container'></div>
 		<div class="row">
 			<div class="col-lg-1"></div>
 			<div class="col-lg-10">
@@ -386,13 +451,15 @@ function checkCookie() {
 							
 			</div>
 			<div class="col-lg-1" id="final_list"></div>
-		</div >
+		</div  >
 		
 		<p>&nbsp;</p>
 		<center>
 			<a class="btn btn-default btn-lg" onClick='reset()'>Reset</a>
-			<a class="btn btn-success btn-lg" onClick='Next()'>Submit</a>
-			<a class="btn btn-danger btn-lg" onClick= 'cook_up()'>Set and Get Cookie</a>
+			<a class="btn btn-success btn-lg" onClick='Next()'>Submit</a><br/>
+			<a class="btn btn-default btn-lg" onClick='makeCookie()'>Set</a>
+			<a class="btn btn-danger btn-lg" onClick='bringCookie()'>Get</a>
+			<a class="btn btn-danger btn-lg" onClick='dropCookie()'>Drop</a>
 		</center>
 	</div>	
   </body>
