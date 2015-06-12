@@ -1,0 +1,123 @@
+  @font-face {
+	   font-family: big_header;
+	   src: url('fonts/big_header_2.TTF');
+	}
+  
+  .tile{
+	padding:0px;
+  }
+  
+.instruction_box {
+	background-color: #F5EFFB;
+	padding-left:25px;
+	border:solid;
+	border-color: #ECE0F8;
+	border-width: 2px;
+	border-radius:10px;
+}
+
+.instruction_box h1{ 
+	font-size: 48px;
+	color:#4C0B5F;
+	padding-left:25px;
+	
+
+}
+
+.instruction_box p{ 
+	text-align:center;
+	padding-top:15px;
+	font-size:25px;
+	
+}
+  
+.document-container {
+    margin: 0 -10px 20px;
+}
+.document-tile {
+	padding-left: 0;
+	list-style: none;
+}
+
+.document-tile li {
+	background-color:#E0ECF8;
+	padding: 10px;
+	margin:6px;
+	float: left;
+	
+	/* Border */
+	border:solid;
+	border-width:1px;
+	border-radius:7px;
+	border-color:#D8D8D8;
+	
+	
+	/* Dimensions */
+	width: 23%;
+	height: 115px;
+	
+	
+	/* Content Styling */
+	background-color: #f9f9f9;
+	text-align: center;
+	
+	
+	/* Disable Selection of the tiles */
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+
+	cursor:copy;
+}
+
+.document-tile li:hover {
+	color: #fff;
+	background-color: #563d7c
+
+}
+
+.document-tile li.on, .document-tile li.on:hover {
+	color: #fff;
+	background-color: #380B61;
+	cursor:default;
+}
+
+#reset_tile{
+	background-color:#F8ECE0;
+	cursor:default;
+	text-align:center;
+	right:0px;	
+}
+#reset_tile:hover{
+	background-color:#F6CECE;
+	cursor:default;
+	text-align:center;
+	right:0px;	
+}
+
+#next_tile{
+	background-color:#0B614B;
+	cursor:default;
+	color:#E3F6CE;
+	text-align:center;
+	right:0px;	
+}
+
+#next_tile:hover{
+	background-color:#74DF00;
+	cursor:default;
+	color:#E3F6CE;
+	text-align:center;
+	right:0px;	
+}
+
+
+.document-tile li.off, .document-tile li.off:hover {
+	color: #F2F2F2;
+	background-color: #E6E6E6;
+	pointer-events: none;
+
+}

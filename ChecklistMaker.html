@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<link href="css/bootstrap.css" rel="stylesheet"></link>
+	<link href="css/intensive-styling.css" rel="stylesheet"></link>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+	<script src="js/bootstrap.js"></script>
+    <title>Checklist Maker</title>
+  <script>
+	var chaque_document= {
+		'i20':			{'id':'i20',			'name':'I-20', 				'status':false	,	'hash':'#i20'}, 
+		'ds2019': 		{'id':'ds2019', 		'name':'DS-2019', 			'status':false,	'hash':'#ds2019'},
+		'phone': 		{'id':'phone', 		'name':'Phone Number',		'status':false,	'hash':'#phone'},
+		'orientation':	{'id':'orientation',	'name':'Orientation', 		'status':false,	'hash':'#orientation'},
+		'passport': 	{'id':'passport', 	'name':'Passport', 			'status':false,	'hash':'#passport'},
+		'visa': 		{'id':'visa', 			'name':'Visa', 				'status':false,	'hash':'#visa'	},
+		'i94': 		{'id':'i94', 			'name':'I-94', 				'status':false,	'hash':'#i94'},
+		'statchange': 	{'id':'statchange', 	'name':'I-797', 				'status':false,	'hash':'#statchange'},
+		'contacts': 	{'id':'contacts', 	'name':'Emergency Contacts', 'status':false,	'hash':'#contacts'},
+		'address': 	{'id':'address', 		'name':'Local Address', 		'status':false,	'hash':'#address'}
+	};
+
+		
+	// LOCK THE DOCUMENTS IN THE ARRAY
+	function lock_these(which_ones){
+		for(var index in which_ones){
+			$(which_ones[index]['hash']).addClass('off');
+		}
+	}
+	
+	// UNLOCK THE DOCUMENTS IN THE ARRAY
+	function unlock_these(which_ones){
+		for(var index in which_ones){
+			$(which_ones[index]['hash']).removeClass('off');
+		}
+	}
+	
+	// PRINT THE NAMES IN A DRAGGABLE DIV
+	function print_selected(){
+		var selected = '';
+		document.getElementById('document_canvas').innerHTML='<a href="#" class="list-group-item active" style="background:#F5EFFB;color:#000000;border-color: #ECE0F8;"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Selected Documents</a>';
+		for(var index in chaque_document){
+			if(chaque_document[index]['status'] == true){
+				document.getElementById('document_canvas').innerHTML+= '<a href="#" class="list-group-item">'+chaque_document[index]['name'];+'</a>';
+			}
+		}
+	}
+	
+	
+	function reset(){
+		for(var index in chaque_document){
+			chaque_document[index]['status'] = false;
+			var doc_name= '#'+ chaque_document[index]['id'];
+			$(doc_name).removeClass('on');
+			$(doc_name).removeClass('off');
+		}
+	}
+	
+	function doc_clicked(clicked_document){
+		
+		
+		if(chaque_document[clicked_document]['status'] == false){
+			
+			chaque_document[clicked_document]['status'] = true;
+			$('#'+clicked_document).addClass('on');
+		}
+		
+		print_selected();
+	}
+	
+	
+	// TEST GIVEN FUNCTION(S)
+	function tester(){
+		lock_these(chaque_document);
+		setTimeout(function(){unlock_these(chaque_document);},2000);
+	}
+  
+  </script>
+  </head>
+  <body>
+<!---- ======================================== NAVBAR BEGINS =============================================================== ---------->  
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	  
+	  <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Checklist</a></li>
+		<li><a href="#">Back</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Options<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li onClick='f1f2_intensive()'><a href="#">F-1/F-2 Intensive</a></li>
+            <li onClick='j1j2_intensive()'><a href="#">J-1/J-2 Intensive</a></li>
+            <li onClick='other_intensive()'><a href="#">Other Intensive</a></li>
+            <li class="divider"></li>
+			 <li onClick='i94contact()'><a href="#">I-94, Address, Contact</a></li>
+            <li class="divider"></li>
+            <li onClick='express_i94()'><a href="#">Express Check In (I-94)</a></li>
+			 <li onClick='express_contact()'><a href="#">Express Check In (Contact & address)</a></li>
+			 <li class="divider"></li>
+            <li onClick='reset()'><a href="#">Custom</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Administrative <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+				<li><a href="#" onClick='clearAll_Restart()'>Restart</a></li>
+				
+				<li><a href="#">Another action</a></li>
+				<li><a href="#">Something else here</a></li>
+				<li class="divider"></li>
+				<li><a href="http://iss.ku.edu" target="_blank">ISS Website</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<!---- ======================================== NAVBAR ENDS =============================================================== ---------->
+
+<!--=====================================================================================================================================-->
+<!------ Reset Confirmation ----->
+<div class="modal fade" id="reset_confirmation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+		<div class="modal-body">
+		   <h1>Reset?</h1>
+		   <hr>
+		   <p class="lead">Are you sure that you want to <strong>reset and restart</strong>?</p>
+		</div>
+		<div class="modal-footer">
+		<center>
+			<button type="button" class="btn btn-success" data-dismiss="modal" onClick="perform_exit();">Yes</button>
+			<button type="button" class="btn btn-danger" data-dismiss="modal">&nbsp;No&nbsp;</button>
+		</center>
+	  </div>
+	  </div>
+    </div>
+  </div>
+</div>
+<!--=====================================================================================================================================-->
+<!------ ERROR REPORTING ----->
+<div class="modal fade" id="error_report" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+		<div class="modal-body">
+		   <h1>Error</h1>
+		   <hr>
+		   <p class="lead" id='print_error'></p>
+		</div>
+		<div class="modal-footer">
+		<center>
+			<button type="button" class="btn btn-danger" data-dismiss="modal">&nbsp;Alright&nbsp;</button>
+		</center>
+	  </div>
+	  </div>
+    </div>
+  </div>
+</div>
+<!--=====================================================================================================================================-->
+	<div class="container" >
+			<div class="instruction_box">
+				<p class="lead">Please look at your <strong><span style="background:#FE2E64;">&nbsp;Pink Checklist&nbsp;</span></strong> and select the forms that you need to submit.</p>
+			</div>
+			<p>&nbsp;</p>
+			<div class="row" id='error_container'></div>
+		<div class="row">
+			<div class="col-lg-1"></div>
+			<div class="col-lg-10">
+				<div class="document-container">
+						<ul class="document-tile">
+								<li onClick='doc_clicked(this.id)' id='i20'>
+								  <h3>I-20</h3>
+								</li>
+							  
+							   <li onClick='doc_clicked(this.id)' id='ds2019'>
+								  <h3>DS-2019</h3>
+								</li>
+								
+								 <li onClick='doc_clicked(this.id)' id='phone'>
+								  <h3>Phone Number</h3>
+								</li>
+								
+								<li onClick='doc_clicked(this.id)' id='orientation'>
+								  <h3>Orientation</h3>
+								</li>
+								
+								<li onClick='doc_clicked(this.id)' id='passport'>
+								  <h3>Passport</h3>
+								</li>
+							  
+								<li onClick='doc_clicked(this.id)' id='visa'>
+								  <h3>Visa</h3>
+								</li>
+							  
+								<li onClick='doc_clicked(this.id)' id='i94'>
+								  <h3>I-94</h3>
+								</li>
+								
+								<li onClick='doc_clicked(this.id)' id='statchange'>
+								  <h3>I-797</h3>
+								</li>
+							  
+							   <li onClick='doc_clicked(this.id)' id='contacts'>
+								  <h3>Emergency Contacts</h3>
+								</li>
+								
+								<li onClick='doc_clicked(this.id)' id='address'>
+								  <h3>Local Address</h3>
+								</li> 
+						</ul>
+					</div>
+					<div class="col-lg-1"></div>
+			</div>
+				<div class="sidebar-offcanvas"  style="position:absolute;width:150px;right:10px;">
+				  <div class="list-group" id="document_canvas"></div>
+				</div>
+			</div>
+		</div>
+		<p>&nbsp;</p>
+		<center>
+			<a class="btn btn-default btn-lg" onClick='reset()'>Reset</a>
+			<a class="btn btn-success btn-lg" onClick='Next()'>Submit</a>
+			<a class="btn btn-danger btn-lg" onClick='tester()'>Test</a>
+			<br/>
+			
+		</center>
+	</div>	
+  </body>
+</html>
