@@ -8,6 +8,10 @@
 	<script src="js/bootstrap.js"></script>
     <title>Checklist Maker</title>
   <script>
+  $(function() {
+			$( "#document_canvas" ).draggable();
+	});
+  
 	var chaque_document= {
 		'i20':			{'id':'i20',			'name':'I-20', 				'status':false	,	'hash':'#i20'}, 
 		'ds2019': 		{'id':'ds2019', 		'name':'DS-2019', 			'status':false,	'hash':'#ds2019'},
@@ -21,6 +25,7 @@
 		'address': 	{'id':'address', 		'name':'Local Address', 		'status':false,	'hash':'#address'}
 	};
 
+	
 		
 	// LOCK THE DOCUMENTS IN THE ARRAY
 	function lock_these(which_ones){
@@ -38,48 +43,112 @@
 	
 	// PRINT THE NAMES IN A DRAGGABLE DIV
 	function print_selected(){
-		var selected = '';
-		document.getElementById('document_canvas').innerHTML='<a href="#" class="list-group-item active" style="background:#F5EFFB;color:#000000;border-color: #ECE0F8;"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Selected Documents</a>';
+		var empty = true;
+		document.getElementById('document_canvas').innerHTML='';
 		for(var index in chaque_document){
 			if(chaque_document[index]['status'] == true){
+				empty= false;
 				document.getElementById('document_canvas').innerHTML+= '<a href="#" class="list-group-item">'+chaque_document[index]['name'];+'</a>';
 			}
 		}
+		
+		if(!empty) 
+			document.getElementById('document_canvas').innerHTML='<a href="#" class="list-group-item active" style="background:#F5EFFB;color:#000000;border-color: #ECE0F8;"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Selected Documents</a>'+ document.getElementById('document_canvas').innerHTML;
 	}
 	
-	
+	// RESET SELECTIONS AND VOID THE ARRAY
 	function reset(){
 		for(var index in chaque_document){
 			chaque_document[index]['status'] = false;
-			var doc_name= '#'+ chaque_document[index]['id'];
-			$(doc_name).removeClass('on');
-			$(doc_name).removeClass('off');
+			$(chaque_document[index]['hash']).removeClass('on');
+			$(chaque_document[index]['hash']).removeClass('off');
 		}
-	}
-	
-	function doc_clicked(clicked_document){
-		
-		
-		if(chaque_document[clicked_document]['status'] == false){
-			
-			chaque_document[clicked_document]['status'] = true;
-			$('#'+clicked_document).addClass('on');
-		}
-		
 		print_selected();
 	}
+	
+	// DETECT CLICK : DETERMINE DOC STATUS AND ACTION.
+	function doc_clicked(clicked_document){
+		if(chaque_document[clicked_document]['status'] == false)
+				select_document(clicked_document);
+		else 	unselect_document(clicked_document);
+		print_selected();
+	}
+	
+	// ADD THE DOCUMENT AND RUN PRESETS
+	function select_document(clicked_document){
+		chaque_document[clicked_document]['status'] = true;
+		$('#'+clicked_document).addClass('on');
+	}
+	
+	// REMOVE THE DOCUMENT
+	function unselect_document(clicked_document){
+		chaque_document[clicked_document]['status'] = false;
+		$('#'+clicked_document).removeClass('on');
+	}
+	
 	
 	
 	// TEST GIVEN FUNCTION(S)
 	function tester(){
-		lock_these(chaque_document);
-		setTimeout(function(){unlock_these(chaque_document);},2000);
+		$('#reset_confirmation').modal('show');
 	}
   
   </script>
+  <style>
+	
+  </style>
+  
   </head>
-  <body>
+  
+  
+  <!--=====================================================================================================================================-->
+<!------ Reset Confirmation ----->
+<div class="modal fade" id="reset_confirmation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" style="display:none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+		<div class="modal-body">
+		   <h1>Reset?</h1>
+		   <hr>
+		   <p class="lead">Are you sure that you want to <strong>reset and restart</strong>?</p>
+		</div>
+		<div class="modal-footer">
+		<center>
+			<button type="button" class="btn btn-success" data-dismiss="modal" onClick="perform_exit();">Yes</button>
+			<button type="button" class="btn btn-danger" data-dismiss="modal">&nbsp;No&nbsp;</button>
+		</center>
+	  </div>
+	  </div>
+    </div>
+  </div>
+</div>
+<!--=====================================================================================================================================-->
+<!------ ERROR REPORTING ----->
+<div class="modal fade" id="error_report" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" style="display:none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+		<div class="modal-body">
+		   <h1>Error</h1>
+		   <hr>
+		   <p class="lead" id='print_error'></p>
+		</div>
+		<div class="modal-footer">
+		<center>
+			<button type="button" class="btn btn-danger" data-dismiss="modal">&nbsp;Alright&nbsp;</button>
+		</center>
+	  </div>
+	  </div>
+    </div>
+  </div>
+</div>
+<!--=====================================================================================================================================-->
+ 
+  
+<body>
 <!---- ======================================== NAVBAR BEGINS =============================================================== ---------->  
+
+
+
+
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -122,52 +191,12 @@
 </nav>
 <!---- ======================================== NAVBAR ENDS =============================================================== ---------->
 
-<!--=====================================================================================================================================-->
-<!------ Reset Confirmation ----->
-<div class="modal fade" id="reset_confirmation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-  <div class="modal-dialog">
-    <div class="modal-content">
-		<div class="modal-body">
-		   <h1>Reset?</h1>
-		   <hr>
-		   <p class="lead">Are you sure that you want to <strong>reset and restart</strong>?</p>
-		</div>
-		<div class="modal-footer">
-		<center>
-			<button type="button" class="btn btn-success" data-dismiss="modal" onClick="perform_exit();">Yes</button>
-			<button type="button" class="btn btn-danger" data-dismiss="modal">&nbsp;No&nbsp;</button>
-		</center>
-	  </div>
-	  </div>
-    </div>
-  </div>
-</div>
-<!--=====================================================================================================================================-->
-<!------ ERROR REPORTING ----->
-<div class="modal fade" id="error_report" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-  <div class="modal-dialog">
-    <div class="modal-content">
-		<div class="modal-body">
-		   <h1>Error</h1>
-		   <hr>
-		   <p class="lead" id='print_error'></p>
-		</div>
-		<div class="modal-footer">
-		<center>
-			<button type="button" class="btn btn-danger" data-dismiss="modal">&nbsp;Alright&nbsp;</button>
-		</center>
-	  </div>
-	  </div>
-    </div>
-  </div>
-</div>
-<!--=====================================================================================================================================-->
 	<div class="container" >
-			<div class="instruction_box">
-				<p class="lead">Please look at your <strong><span style="background:#FE2E64;">&nbsp;Pink Checklist&nbsp;</span></strong> and select the forms that you need to submit.</p>
-			</div>
-			<p>&nbsp;</p>
-			<div class="row" id='error_container'></div>
+		<div class="instruction_box">
+			<p class="lead">Please look at your <strong><span style="background:#FE2E64;">&nbsp;Pink Checklist&nbsp;</span></strong> and select the forms that you need to submit.</p>
+		</div>
+		<p>&nbsp;</p>
+		<div class="row" id='error_container'></div>
 		<div class="row">
 			<div class="col-lg-1"></div>
 			<div class="col-lg-10">
@@ -214,21 +243,26 @@
 								</li> 
 						</ul>
 					</div>
-					<div class="col-lg-1"></div>
-			</div>
-				<div class="sidebar-offcanvas"  style="position:absolute;width:150px;right:10px;">
-				  <div class="list-group" id="document_canvas"></div>
 				</div>
+				<div class="col-lg-1">
+					<div class="sidebar-offcanvas"  style="position:absolute;width:125px;right:10px;">
+						<div class="list-group" id="document_canvas"></div>
+					</div>
+				</div>
+		</div>
+	</div>
+	<hr>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<center>
+					<p>asdjhbaSKJDHa sdjhabDS KJahsdb akjHSDB AKjhsdb akjhSDB Akjsdhba kjsdhb akjsDB</p>
+					<a class="btn btn-default btn-lg" onClick='reset()'>Reset</a>
+					<a class="btn btn-success btn-lg" onClick='Next()'>Submit</a>
+					<a class="btn btn-danger btn-lg" onClick='tester()'>Test</a>
+				</center>
 			</div>
 		</div>
-		<p>&nbsp;</p>
-		<center>
-			<a class="btn btn-default btn-lg" onClick='reset()'>Reset</a>
-			<a class="btn btn-success btn-lg" onClick='Next()'>Submit</a>
-			<a class="btn btn-danger btn-lg" onClick='tester()'>Test</a>
-			<br/>
-			
-		</center>
-	</div>	
+	</div>
   </body>
 </html>
