@@ -62,6 +62,8 @@
 			chaque_document[index]['status'] = false;
 			$(chaque_document[index]['hash']).removeClass('on');
 			$(chaque_document[index]['hash']).removeClass('off');
+			var removed_glyphicon= document.getElementById(chaque_document[index]['id']).innerHTML.replace('<span class="glyphicon glyphicon-ok"></span>', '');
+			document.getElementById(chaque_document[index]['id']).innerHTML = removed_glyphicon;
 		}
 		print_selected();
 	}
@@ -78,14 +80,30 @@
 	function select_document(clicked_document){
 		chaque_document[clicked_document]['status'] = true;
 		$('#'+clicked_document).addClass('on');
+		document.getElementById(clicked_document).innerHTML = '<span class="glyphicon glyphicon-ok"></span>'+document.getElementById(clicked_document).innerHTML;
 	}
 	
 	// REMOVE THE DOCUMENT
 	function unselect_document(clicked_document){
 		chaque_document[clicked_document]['status'] = false;
 		$('#'+clicked_document).removeClass('on');
+		var removed_glyphicon= document.getElementById(clicked_document).innerHTML.replace('<span class="glyphicon glyphicon-ok"></span>', '');
+		document.getElementById(clicked_document).innerHTML = removed_glyphicon;
 	}
 	
+	// LOAD A PRESET
+	function load_preset(preset_id){
+		reset();
+		i94_express_list= ['i94', 'contacts', 'address'];
+	
+		if(preset_id== 'i94_express'){
+			for(var index in i94_express_list){
+				select_document(i94_express_list[index])
+			}
+		}
+	
+		print_selected();
+	}
 	
 	
 	// TEST GIVEN FUNCTION(S)
@@ -94,10 +112,6 @@
 	}
   
   </script>
-  <style>
-	
-  </style>
-  
   </head>
   
   
@@ -145,10 +159,6 @@
   
 <body>
 <!---- ======================================== NAVBAR BEGINS =============================================================== ---------->  
-
-
-
-
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -164,7 +174,7 @@
             <li onClick='j1j2_intensive()'><a href="#">J-1/J-2 Intensive</a></li>
             <li onClick='other_intensive()'><a href="#">Other Intensive</a></li>
             <li class="divider"></li>
-			 <li onClick='i94contact()'><a href="#">I-94, Address, Contact</a></li>
+			 <li onClick='load_preset("i94_express")'><a href="#">I-94, Address, Contact</a></li>
             <li class="divider"></li>
             <li onClick='express_i94()'><a href="#">Express Check In (I-94)</a></li>
 			 <li onClick='express_contact()'><a href="#">Express Check In (Contact & address)</a></li>
@@ -193,7 +203,7 @@
 
 	<div class="container" >
 		<div class="instruction_box">
-			<p class="lead">Please look at your <strong><span style="background:#FE2E64;">&nbsp;Pink Checklist&nbsp;</span></strong> and select the forms that you need to submit.</p>
+			<p class="lead">Please look at your <strong><span style="background:#FE2E64;">&nbsp;Pink Checklist&nbsp;</span></strong> and select the forms that have a <img src="images/ihawkCheck.png"> checkmark.</p>
 		</div>
 		<p>&nbsp;</p>
 		<div class="row" id='error_container'></div>
@@ -244,19 +254,18 @@
 						</ul>
 					</div>
 				</div>
-				<div class="col-lg-1">
-					<div class="sidebar-offcanvas"  style="position:absolute;width:125px;right:10px;">
-						<div class="list-group" id="document_canvas"></div>
-					</div>
-				</div>
+				<div class="col-lg-1"></div>
 		</div>
 	</div>
+	<div class="sidebar-offcanvas"  style="position:absolute;width:125px;right:10px;top:210px;">
+						<div class="list-group" id="document_canvas"></div>
+					</div>
 	<hr>
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12">
 				<center>
-					<p>asdjhbaSKJDHa sdjhabDS KJahsdb akjHSDB AKjhsdb akjhSDB Akjsdhba kjsdhb akjsDB</p>
+					<p>Click Submit when you have selected all the documents.</p>
 					<a class="btn btn-default btn-lg" onClick='reset()'>Reset</a>
 					<a class="btn btn-success btn-lg" onClick='Next()'>Submit</a>
 					<a class="btn btn-danger btn-lg" onClick='tester()'>Test</a>
